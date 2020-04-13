@@ -10,10 +10,9 @@ import datetime
 import time, threading
 import schedule
 url = 'http://localhost:8083/sensor/v1/'
-myobj = {'somekey': 'somevalue'}
 kwh=0.0
 counter=0
-impulse=1000
+impulse=1600
 filialId=23
 usb_port=''
 
@@ -101,7 +100,6 @@ def run_threaded(job_func):
     job_thread.start()
 # kwh=save_data(12.4)
 kwh=load_data(kwh)
-# send_post()
 t = threading.Timer(600, send_post)
 t.start()
 while True:
