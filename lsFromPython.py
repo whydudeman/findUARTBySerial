@@ -9,7 +9,7 @@ import os
 import datetime
 import time, threading
 import schedule
-url = 'http://http://188.40.108.37/:8084/sensor/v1/'
+url = 'http://188.40.108.37:8084/sensor/v1/'
 kwh=0.0
 counter=0
 impulse=1600
@@ -43,7 +43,7 @@ def find_port(port_name=None,baudrate=9600,timeout=0.2):
 			print(e)
 			pass
 		except Exception as e:
-			print("Got err "+e)
+			print(e)
 			pass
 	return arduino_port
 def openbci_id(serial):
@@ -55,7 +55,7 @@ def openbci_id(serial):
     line = ''
     #Wait for device to send data
     time.sleep(2)
-    
+    c=''
     if serial.inWaiting():
     	c = serial.read().decode('utf-8')
     if len(c)>0:
@@ -100,8 +100,9 @@ def run_threaded(job_func):
     job_thread.start()
 # kwh=save_data(12.4)
 kwh=load_data(kwh)
-t = threading.Timer(600, send_post)
-t.start()
+send_post()
+# t = threading.Timer(600, send_post)
+# t.start()
 while True:
 	try:
 		print("tring to find port")
@@ -122,10 +123,12 @@ while True:
 			while True:
 				data=''
 				if arduino.inWaiting():
-					data = arduino.readline()[:-2] #the last bit gets rid of the new-line chars
+					data = arduino.readline()[:-1] #the last bit gets rid of the new-line chars
 					print(data.decode())
-					if data.decode()=='1kw':
+					if data.decode()=='1kwh':
 						kwh=kwh+1/impulse
+						currentTime=datetime.datetime.now()
+						currentTime=currentTime.strftime("%Y-%m-%dT%H:%M:%S")
 						print(kwh)
 			# if data:
 			# 	print(arduino.read())
