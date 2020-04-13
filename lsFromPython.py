@@ -9,7 +9,7 @@ import os
 import datetime
 import time, threading
 import schedule
-url = 'http://localhost:8083/sensor/v1/'
+url = 'http://http://188.40.108.37/:8084/sensor/v1/'
 kwh=0.0
 counter=0
 impulse=1600
